@@ -7,6 +7,9 @@ import Signin from './components/Signin/Signin';
 import Login from './components/Login/Login';
 import Main from './components/Main/Main'
 import instance from './instance';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
 
 function App() {
 
@@ -27,21 +30,25 @@ function App() {
 
 
   return (
-    <Router>
-      <Header Login={isLoggedIn} setLoggedIn={handleLogin} />
-      {!isLoggedIn ?
-        (
-          <Routes>
-            <Route path="/" element={<Signin login={handleLogin} />} />
-            <Route path="/login" element={<Login login={handleLogin} />} />
-          </Routes>
-        ) : (
-          <Main />
-        )
-      }
+    <React.StrictMode>
+      <DndProvider backend={HTML5Backend}>
+        <Router>
+          <Header Login={isLoggedIn} setLoggedIn={handleLogin} />
+          {!isLoggedIn ?
+            (
+              <Routes>
+                <Route path="/" element={<Signin login={handleLogin} />} />
+                <Route path="/login" element={<Login login={handleLogin} />} />
+              </Routes>
+            ) : (
+              <Main />
+            )
+          }
 
-      < Footer />
-    </Router>
+          < Footer />
+        </Router>
+      </DndProvider>
+    </React.StrictMode>
   );
 }
 
