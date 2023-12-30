@@ -8,7 +8,11 @@ const Main = () => {
 
   const fetchData = async () => {
     try {
-      const response = await instance.get('/api/v1/list');
+      const response = await instance.get('/api/v1/list', {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       setData(response.data.list);
     } catch (error) {
       if (error.response) {
@@ -29,11 +33,11 @@ const Main = () => {
   return (
     <div className='min-h-[87vh] p-4 relative flex '>
       <div className='flex flex-wrap gap-5 '>
-       
+
         {data.map((item, index) => (
-           <List index={index+1} setData={setData}  data={item} />
+          <List index={index + 1} setData={setData} data={item} />
         ))}
-         <CreateList fetch={fetchData} />
+        <CreateList fetch={fetchData} />
       </div>
     </div>
   );
