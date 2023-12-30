@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import instance from '../../instance.js'
+import instance from '../../instance.js';
 
 const Login = ({ login }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState(null); // New state for login error
 
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,6 +26,7 @@ const Login = ({ login }) => {
       if (error.response) {
         console.log("Server Error:", error.response.data);
         console.log("Status Code:", error.response.status);
+        setLoginError("Invalid email or password"); // Set the login error message
       } else if (error.request) {
         console.log("No response received");
       } else {
@@ -41,22 +42,26 @@ const Login = ({ login }) => {
           <div>Login</div>
         </h2>
         <form>
-          <div className="mb-4">
+          <div className={`mb-4 ${loginError ? 'border-red-500' : ''}`}>
             <label htmlFor="email" className="block text-sm font-medium text-gray-600">
               Email
             </label>
             <input
+              autoComplete="email"
               type="email"
               id="email"
               name="email"
-              className="mt-1 p-2 w-full border rounded-md"
+              className={`mt-1 p-2 w-full border rounded-md ${loginError ? 'border-red-500' : ''}`}
               placeholder="Your email"
               required
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setLoginError(null); // Clear login error when email changes
+              }}
             />
           </div>
-          <div className="mb-4">
+          <div className={`mb-4 ${loginError ? 'border-red-500' : ''}`}>
             <label htmlFor="password" className="block text-sm font-medium text-gray-600">
               Password
             </label>
@@ -65,11 +70,15 @@ const Login = ({ login }) => {
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"
-                className="mt-1 p-2 w-full border rounded-md pr-10"
+                className={`mt-1 p-2 w-full border rounded-md pr-10 ${loginError ? 'border-red-500' : ''}`}
                 placeholder="Your password"
                 required
+                autoComplete="current-password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setLoginError(null); // Clear login error when password changes
+                }}
               />
               <button
                 type="button"
@@ -87,6 +96,9 @@ const Login = ({ login }) => {
           >
             Login
           </button>
+          {loginError && (
+            <p className="p-2 text-red-500">{loginError}</p>
+          )}
           <p className="p-2 text-blue-600 active:text-red-400 hover:text-blue-300"><Link to="/" >Create your account</Link> </p>
         </form>
       </div>

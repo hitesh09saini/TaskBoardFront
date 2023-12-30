@@ -6,14 +6,14 @@ const Signin = ({ login }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
- 
+  const [loginError, setLoginError] = useState(null); // New state for login error
+
   const handleTogglePassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await instance.post(`/api/v1/user/register`, {
         email,
@@ -22,6 +22,7 @@ const Signin = ({ login }) => {
       login();
     } catch (error) {
       if (error.response) {
+        setLoginError("This email is already registered.");
         console.log("Server Error:", error.response.data);
         console.log("Status Code:", error.response.status);
       } else if (error.request) {
@@ -30,7 +31,7 @@ const Signin = ({ login }) => {
         console.log("Error:", error.message);
       }
     }
-    
+
   };
 
   return (
@@ -48,11 +49,15 @@ const Signin = ({ login }) => {
               type="email"
               id="email"
               name="email"
-              className="mt-1 p-2 w-full border rounded-md"
+              className={`mt-1 p-2 w-full border rounded-md ${loginError ? 'border-red-500' : ''}`}
               placeholder="Your email"
               required
+              autoComplete="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setLoginError(null); // Clear login error when email changes
+              }}
             />
           </div>
           <div className="mb-4">
@@ -64,11 +69,15 @@ const Signin = ({ login }) => {
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"
-                className="mt-1 p-2 tracking-wider  w-full border rounded-md pr-10"
+                className={`mt-1 p-2 w-full border rounded-md pr-10 ${loginError ? 'border-red-500' : ''}`}
                 placeholder="Your password"
                 required
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setLoginError(null); // Clear login error when password changes
+                }}
               />
               <button
                 type="button"
@@ -85,6 +94,9 @@ const Signin = ({ login }) => {
           >
             Sign In
           </button>
+          {loginError && (
+            <p className="p-2 text-red-500">{loginError}</p>
+          )}
           <p className="p-2 text-blue-600 active:text-red-400 hover:text-blue-300">
             <Link to="/login">Login, if you have an account?</Link>
           </p>

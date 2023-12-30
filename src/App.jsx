@@ -25,8 +25,10 @@ function App() {
   }
 
   useEffect(() => {
-    handleLogin();
-  })
+    handleLogin().catch(error => {
+      console.error('Login failed:', error);
+    });
+  }, []);
 
 
   return (
