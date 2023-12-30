@@ -3,11 +3,12 @@ import CreateList from '../List/CreateList';
 import List from '../List/List';
 import instance from '../../instance';
 
-const Main = () => {
+const Main = ({loader}) => {
   const [data, setData] = useState([]);
 
   const fetchData = async () => {
     try {
+      loader(true)
       const response = await instance.get('/api/v1/list');
       setData(response.data.list);
     } catch (error) {
@@ -19,6 +20,8 @@ const Main = () => {
       } else {
         console.log('Error:', error.message);
       }
+    }finally{
+      loader(false)
     }
   };
 
@@ -31,7 +34,7 @@ const Main = () => {
       <div className='flex flex-wrap gap-5 '>
 
         {data.map((item, index) => (
-          <List key={item._id} index={index + 1} setData={setData} data={item} />
+          <List loader={loader} key={item._id} index={index + 1} setData={setData} data={item} />
         ))}
         <CreateList fetch={fetchData} />
       </div>

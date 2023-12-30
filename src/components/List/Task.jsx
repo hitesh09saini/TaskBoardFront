@@ -2,31 +2,38 @@ import React, { useState } from 'react';
 import instance from '../../instance';
 import { useDrag } from 'react-dnd';
 
-const Task = ({set, item, id }) => {
+const Task = ({loader, set, item, id }) => {
     const [status, setStatus] = useState(item.status);
     const [input, setInput] = useState(item.taskName);
     const [isEdit, setEdit] = useState(false);
     const key = item._id;
 
     const changeStatus = async () => {
+        loader(true)
         try {
             const response = await instance.put(`/api/v1/list/status/${id}/${key}`);
             setStatus(!status);
         } catch (error) {
             console.error('Error changing task status:', error);
+        }finally{
+            loader(false);
         }
     };
 
     const deleteTask = async () => {
+        loader(true)
         try {
             const response = await instance.delete(`/api/v1/list/task/${id}/${key}`);
             set(response.data.list.tasks);
         } catch (error) {
             console.error('Error deleting task:', error);
+        }finally{
+            loader(false)
         }
     };
 
     const editTask = async () => {
+        loader(true)
         try {
             const response = await instance.put(`/api/v1/list/task/${id}/${key}`, {
                 taskName: input,
@@ -36,6 +43,8 @@ const Task = ({set, item, id }) => {
             setEdit(false);
         } catch (error) {
             console.error('Error editing task:', error);
+        }finally{
+            loader(false)
         }
     };
 

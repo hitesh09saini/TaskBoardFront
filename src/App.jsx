@@ -9,18 +9,25 @@ import Main from './components/Main/Main'
 import instance from './instance';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
+import Loader from './components/Loader/Loader'
 
 function App() {
 
   const [isLoggedIn, setLoggedIn] = useState(false)
+  const [loader, setLoader] = useState(false)
+  const setLoading = (val) => {
+     setLoader(val);
+  }
 
   const handleLogin = async () => {
+    setLoading(true)
     try {
       const res = await instance.get('/api/v1/list');
       setLoggedIn(true);
     } catch (error) {
       setLoggedIn(false)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -35,19 +42,31 @@ function App() {
     <React.StrictMode>
       <DndProvider backend={HTML5Backend}>
         <Router>
-          <Header Login={isLoggedIn} setLoggedIn={handleLogin} />
-          {!isLoggedIn ?
-            (
-              <Routes>
-                <Route path="/" element={<Signin login={handleLogin} />} />
-                <Route path="/login" element={<Login login={handleLogin} />} />
-              </Routes>
-            ) : (
-              <Main />
-            )
-          }
+          <div className='relative'>
 
-          < Footer />
+            <Header Login={isLoggedIn} setLoggedIn={handleLogin} />
+            {!isLoggedIn ?
+              (
+                <Routes>
+                  <Route path="/" element={<Signin loader={setLoading} login={handleLogin} />} />
+                  <Route path="/login" element={<Login loader={setLoading} login={handleLogin} />} />
+                </Routes>
+              ) : (
+                <Main loader={setLoading} />
+              )
+            }
+
+            < Footer />
+
+            {
+              loader ? (
+                <Loader />
+              ) : (
+                ""
+              )
+            }
+
+          </div>
         </Router>
       </DndProvider>
     </React.StrictMode>

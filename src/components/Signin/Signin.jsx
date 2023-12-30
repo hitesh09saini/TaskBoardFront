@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import instance from '../../instance';
 
-const Signin = ({ login }) => {
+const Signin = ({loader, login }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -14,6 +14,7 @@ const Signin = ({ login }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    loader(true);
     try {
       const response = await instance.post(`/api/v1/user/register`, {
         email,
@@ -30,6 +31,8 @@ const Signin = ({ login }) => {
       } else {
         console.log("Error:", error.message);
       }
+    }finally{
+      loader(false);
     }
 
   };

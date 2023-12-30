@@ -5,7 +5,7 @@ import Task from './Task';
 import { useDrop } from 'react-dnd';
 
 
-const List = ({ index, setData, data }) => {
+const List = ({loader, index, setData, data }) => {
 
 
 
@@ -19,6 +19,7 @@ const List = ({ index, setData, data }) => {
 
   const createTask = async () => {
     // e.preventDefault();
+    loader(true)
     try {
 
       if (!taskName) return;
@@ -32,17 +33,20 @@ const List = ({ index, setData, data }) => {
     } finally {
       setTask('')
       setAddTask(false)
+      loader(false)
     }
   }
 
   const deleteList = async (e) => {
     e.preventDefault();
-
+    loader(true)
     try {
       const res = await instance.delete(`/api/v1/list/${id}`);
       setData(res.data.lists)
     } catch (error) {
       console.error(error);
+    }finally{
+      loader(false)
     }
   }
 
@@ -105,7 +109,7 @@ const List = ({ index, setData, data }) => {
 
           {
             taskData.map((item) => (
-              <Task key={item._id} set={set} item={item} id={id} />
+              <Task loader={loader} key={item._id} set={set} item={item} id={id} />
             )
             )
           }
