@@ -10,7 +10,7 @@ const List = ({ index, setData, data }) => {
 
 
   const [addTask, setAddTask] = useState(false);
-  const [taskName, setTask] = useState();
+  const [taskName, setTask] = useState('');
   const [taskData, setTaskData] = useState([]);
 
   const id = data._id;
@@ -105,7 +105,7 @@ const List = ({ index, setData, data }) => {
 
           {
             taskData.map((item) => (
-              <Task set={set} item={item} id={id} />
+              <Task key={item._id} set={set} item={item} id={id} />
             )
             )
           }

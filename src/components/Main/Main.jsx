@@ -31,7 +31,7 @@ const Main = () => {
       <div className='flex flex-wrap gap-5 '>
 
         {data.map((item, index) => (
-          <List index={index + 1} setData={setData} data={item} />
+          <List key={item._id} index={index + 1} setData={setData} data={item} />
         ))}
         <CreateList fetch={fetchData} />
       </div>

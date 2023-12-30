@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import instance from '../../instance';
 import { useDrag } from 'react-dnd';
 
-const Task = ({ set, item, id, onDelete }) => {
+const Task = ({set, item, id }) => {
     const [status, setStatus] = useState(item.status);
     const [input, setInput] = useState(item.taskName);
     const [isEdit, setEdit] = useState(false);
@@ -60,7 +60,7 @@ const Task = ({ set, item, id, onDelete }) => {
         <p
             ref={drag}
             draggable
-            key={item._id}
+            key={key}
             className={`relative select-none bg-white px-2 rounded border border-orange-200 ${isDragging ? 'opacity-50' : ''
                 }`}
         >
@@ -97,7 +97,6 @@ const Task = ({ set, item, id, onDelete }) => {
             <i
                 onClick={() => {
                     deleteTask();
-                    onDelete(); // Call the callback function to delete the task from the previous list
                 }}
                 className="absolute right-1 top-3 text-red-600 fa-solid fa-trash-alt hover:bg-red-300 active:bg-green-300  active:text-green-400 ml-3 cursor-pointer text-[10px]"
             ></i>
