@@ -21,6 +21,7 @@ const Signin = ({loader, login }) => {
         password,
       });
       login();
+      setLoginError(null);
     } catch (error) {
       if (error.response) {
         setLoginError("This email is already registered.");

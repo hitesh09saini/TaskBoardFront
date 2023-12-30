@@ -11,7 +11,7 @@ const List = ({loader, index, setData, data }) => {
 
   const [addTask, setAddTask] = useState(false);
   const [taskName, setTask] = useState('');
-  const [taskData, setTaskData] = useState([]);
+  const [taskData, setTaskData] = useState(data.tasks);
 
   const id = data._id;
 
@@ -60,9 +60,6 @@ const List = ({loader, index, setData, data }) => {
     }
   }
 
-  useState(() => {
-    set(data.tasks);
-  }, [])
 
 
   const [{ isOver }, drop] = useDrop({

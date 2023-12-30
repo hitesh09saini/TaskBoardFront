@@ -9,4 +9,27 @@ const instance = axios.create({
     },
 });
 
+// Error handling interceptors
+instance.interceptors.request.use(
+    (config) => config,
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+  
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response) {
+        console.error('HTTP error:', error.response.status, error.response.data);
+      } else if (error.request) {
+        console.error('Request error:', error.request);
+      } else {
+        console.error('Error:', error.message);
+      }
+      return Promise.reject(error);
+    }
+  );
+  
+
 export default instance;

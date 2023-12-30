@@ -3,15 +3,18 @@ import CreateList from '../List/CreateList';
 import List from '../List/List';
 import instance from '../../instance';
 
-const Main = ({loader}) => {
+const Main = ({ loader }) => {
   const [data, setData] = useState([]);
+  const [fetchError, setFetchError] = useState(null);
 
   const fetchData = async () => {
     try {
       loader(true)
       const response = await instance.get('/api/v1/list');
       setData(response.data.list);
+      setFetchError(null);
     } catch (error) {
+      setFetchError('Error fetching data. Please try again.');
       if (error.response) {
         console.log('Server Error:', error.response.data);
         console.log('Status Code:', error.response.status);
@@ -20,7 +23,7 @@ const Main = ({loader}) => {
       } else {
         console.log('Error:', error.message);
       }
-    }finally{
+    } finally {
       loader(false)
     }
   };
@@ -32,7 +35,7 @@ const Main = ({loader}) => {
   return (
     <div className='min-h-[87vh] p-4 relative flex '>
       <div className='flex flex-wrap gap-5 '>
-
+        {fetchError && <p className="text-red-500">{fetchError}</p>}
         {data.map((item, index) => (
           <List loader={loader} key={item._id} index={index + 1} setData={setData} data={item} />
         ))}
