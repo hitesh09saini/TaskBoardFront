@@ -17,9 +17,6 @@ const Login = ({ login }) => {
 
     try {
       const response = await instance.post(`/api/v1/user/login`, {
-        headers: {
-          'Content-Type': 'application/json', 
-        },
         email,
         password,
       });

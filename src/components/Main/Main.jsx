@@ -8,11 +8,7 @@ const Main = () => {
 
   const fetchData = async () => {
     try {
-      const response = await instance.get('/api/v1/list', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await instance.get('/api/v1/list');
       setData(response.data.list);
     } catch (error) {
       if (error.response) {
