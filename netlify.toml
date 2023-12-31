@@ -1,7 +1,0 @@
-[build]
-  command = "vite build"  # replace with your build command
-  
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
