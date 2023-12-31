@@ -1,7 +1,6 @@
 [build]
-  command = "npm run build"  # replace with your build command
-  publish = "dist"           # replace with your build output directory
-
+  command = "vite build"  # replace with your build command
+  
 [[redirects]]
   from = "/*"
   to = "/index.html"
