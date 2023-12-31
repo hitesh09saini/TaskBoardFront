@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import CreateList from '../List/CreateList';
 import List from '../List/List';
 import instance from '../../instance';
+import { useNavigate } from "react-router-dom";
 
 const Main = ({ loader }) => {
   const [data, setData] = useState([]);
   const [fetchError, setFetchError] = useState(null);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -13,6 +15,7 @@ const Main = ({ loader }) => {
       const response = await instance.get('/api/v1/list');
       setData(response.data.list);
       setFetchError(null);
+      navigate("/");
     } catch (error) {
       setFetchError('Error fetching data. Please try again.');
       if (error.response) {
@@ -29,6 +32,7 @@ const Main = ({ loader }) => {
   };
 
   useEffect(() => {
+    
     fetchData();
   }, []);
 
