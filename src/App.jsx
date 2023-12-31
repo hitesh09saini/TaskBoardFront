@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import instance from './instance';
@@ -41,11 +41,13 @@ function App() {
       <DndProvider backend={HTML5Backend}>
         <Router>
           <div className='relative'>
+            <Link to='/main'>main</Link>
             <Header isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} />
             {!isLoggedIn ? (
               <Routes>
                 <Route path="/" element={<Signin loader={setLoading} login={handleLogin} />} />
                 <Route path="/login" element={<Login loader={setLoading} login={handleLogin} />} />
+                <Route path="/main" element={<Main loader={setLoading}/>}/>
               </Routes>
             ) : (
               <Main loader={setLoading} />
