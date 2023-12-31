@@ -20,16 +20,22 @@ function App() {
   }
 
   const handleLogin = async () => {
-    setLoading(true)
+    setLoading(true);
     try {
       const res = await instance.get('/api/v1/list');
+      const responseData = res.data;
       setLoggedIn(true);
     } catch (error) {
-      setLoggedIn(false)
+      console.error('Error during login:', error);
+  
+      // Set the logged-in state to false
+      setLoggedIn(false);
     } finally {
-      setLoading(false)
+      // Regardless of success or failure, set loading to false
+      setLoading(false);
     }
-  }
+  };
+  
 
   useEffect(() => {
     handleLogin().catch(error => {
