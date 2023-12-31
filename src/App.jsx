@@ -23,7 +23,6 @@ function App() {
     setLoading(true);
     try {
       const res = await instance.get('/api/v1/list');
-      const responseData = res.data;
       setLoggedIn(true);
     } catch (error) {
       console.error('Error during login:', error.message);
@@ -34,17 +33,7 @@ function App() {
   };
 
   useEffect(() => {
-    const login = async () => {
-      setLoading(true);
-      try {
-        await handleLogin();
-      } catch (error) {
-        console.error('Login failed:', error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    login();
+    handleLogin();
   }, []);
 
   return (
@@ -52,7 +41,7 @@ function App() {
       <DndProvider backend={HTML5Backend}>
         <Router>
           <div className='relative'>
-            <Header isLoggedIn={isLoggedIn} setLoggedIn={handleLogin} />
+            <Header isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} />
             {!isLoggedIn ? (
               <Routes>
                 <Route path="/" element={<Signin loader={setLoading} login={handleLogin} />} />

@@ -2,20 +2,17 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import instance from '../../instance'
 
-const Header = ({ Login, setLoggedIn }) => {
-  const [isLogin, setLogin] = useState(false)
+const Header = ({ isLoggedIn, setLoggedIn }) => {
 
-  useEffect(() => {
-    setLogin(Login);
-  }, [setLoggedIn])
 
   const logout = async (e) => {
     e.preventDefault();
     try {
       const response = await instance.post(`/api/v1/user/logout`);
-      setLoggedIn();
+      setLoggedIn(false);
     } catch (error) {
       if (error.response) {
+        setLoggedIn(true);
         console.log("Server Error:", error.response.data);
         console.log("Status Code:", error.response.status);
       } else if (error.request) {
@@ -30,7 +27,7 @@ const Header = ({ Login, setLoggedIn }) => {
     <div className='flex justify-between items-center px-4 bg-gray-400 w-full h-[40px]'>
       <div>
         {
-          isLogin ? (
+          isLoggedIn ? (
             "Welcome to User"
           ) : (
             "Task Board"
@@ -40,7 +37,7 @@ const Header = ({ Login, setLoggedIn }) => {
 
       <div >
         {
-          isLogin ? (
+          isLoggedIn ? (
             <button className='active:bg-gray-500' onClick={logout}>Logout</button>
           ) : (
             <Link to='/login'>Login</Link>
