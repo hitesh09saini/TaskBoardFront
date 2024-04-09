@@ -13,12 +13,12 @@ const Main = ({ loader }) => {
     try {
       loader(true)
       const response = await instance.get('/api/v1/list');
-      if(response?.data?.list){
+    
         loader(false)
         setData(response.data.list);
         setFetchError(null);
         navigate("/");
-      }
+      
     } catch (error) {
       loader(false)
       setFetchError('Error fetching data. Please try again.');
