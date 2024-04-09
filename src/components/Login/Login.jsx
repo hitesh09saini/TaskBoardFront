@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import instance from '../../instance.js';
 
-const Login = ({ loader,login }) => {
+const Login = ({ loader, login }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -20,9 +20,10 @@ const Login = ({ loader,login }) => {
         email,
         password,
       });
-
+      loader(false)
       login();
     } catch (error) {
+      loader(false)
       if (error.response) {
         console.log("Server Error:", error.response.data);
         console.log("Status Code:", error.response.status);
@@ -32,8 +33,6 @@ const Login = ({ loader,login }) => {
       } else {
         console.log("Error:", error.message);
       }
-    }finally{
-      loader(false)
     }
   };
 

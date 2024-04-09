@@ -23,13 +23,13 @@ function App() {
     setLoading(true);
     try {
       const res = await instance.get('/api/v1/list');
+      setLoading(false);
       setLoggedIn(true);
     } catch (error) {
       console.error('Error during login:', error.message);
       setLoggedIn(false);
-    } finally {
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   useEffect(() => {

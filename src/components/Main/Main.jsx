@@ -13,10 +13,14 @@ const Main = ({ loader }) => {
     try {
       loader(true)
       const response = await instance.get('/api/v1/list');
-      setData(response.data.list);
-      setFetchError(null);
-      navigate("/");
+      if(response?.data?.list){
+        loader(false)
+        setData(response.data.list);
+        setFetchError(null);
+        navigate("/");
+      }
     } catch (error) {
+      loader(false)
       setFetchError('Error fetching data. Please try again.');
       if (error.response) {
         console.log('Server Error:', error.response.data);
@@ -26,13 +30,10 @@ const Main = ({ loader }) => {
       } else {
         console.log('Error:', error.message);
       }
-    } finally {
-      loader(false)
     }
   };
 
-  useEffect(() => {
-    
+  useEffect(() => {  
     fetchData();
   }, []);
 
