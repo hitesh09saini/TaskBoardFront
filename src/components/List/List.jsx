@@ -80,7 +80,7 @@ const List = ({loader, listName, setData, data }) => {
   return (
     <div ref={drop} key={data._id} className='bg-white shadow-xl border rounded  min-h-[300px] h-fit w-fit'>
       <div className='relative bg-[#581845] p-2 px-8 min-w-[200px]  text-center text-white font-bold'>
-         {listName?listName: "LIST"}
+         {listName|| "LIST"}
         <i onClick={deleteList} className='absolute right-2 top-4 text-red-400 fa-solid fa-trash-alt  active:text-red-400 ml-3 cursor-pointer text-[15px]'
         ></i>
       </div>
