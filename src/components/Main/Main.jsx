@@ -10,17 +10,17 @@ const Main = ({ loader }) => {
   const navigate = useNavigate();
 
   const fetchData = async () => {
+    loader(true)
     try {
-      loader(true)
       const response = await instance.get('/api/v1/list');
-    
-        loader(false)
+      if (response?.data?.list) {
         setData(response.data.list);
-        setFetchError(null);
-        navigate("/");
-      
+      }
+      setFetchError(null);
+      navigate("/");
+
     } catch (error) {
-      loader(false)
+
       setFetchError('Error fetching data. Please try again.');
       if (error.response) {
         console.log('Server Error:', error.response.data);
@@ -31,20 +31,23 @@ const Main = ({ loader }) => {
         console.log('Error:', error.message);
       }
     }
+    loader(false)
   };
 
-  useEffect(() => {  
+  useEffect(() => {
     fetchData();
   }, []);
 
   return (
     <div className='min-h-[87vh] p-4 relative flex '>
-      <div className='flex flex-wrap gap-5 '>
-        {fetchError && <p className="text-red-500">{fetchError}</p>}
-        {data.map((item, index) => (
-          <List loader={loader} key={item._id} index={index + 1} setData={setData} data={item} />
-        ))}
+      <div >
         <CreateList fetch={fetchData} />
+        {fetchError && <p className="text-red-500">{fetchError}</p>}
+        <div className='flex flex-wrap gap-5 mt-5'>
+          {data.map((item, index) => (
+            <List loader={loader} key={item._id} listName={item.listName} setData={setData} data={item} />
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,32 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
 import instance from '../../instance';
 
 
-const CreateList = ({fetch}) => {
-     
-  const handleCreateList= async (e)=>{
-       e.preventDefault()
-      try {
-        const res = await instance.post('/api/v1/list/createList', {
-          "tasks": [
-        ]
-        })
-         
-        fetch();
-      } catch (error) {
-        console.log(error);
+const CreateList = ({ fetch }) => {
+  const [listName, setName] = useState('')
+
+  const handleCreateList = async (e) => {
+    e.preventDefault()
+    try {
+      if(!listName){
+        alert('List Name is Required!')
+        return
       }
+      const res = await instance.post('/api/v1/list/createList', {
+        listName,
+        "tasks": [
+        ],
+      })
+
+      setName('')
+      fetch();
+    } catch (error) {
+      console.log(error);
+    }
   }
-   
+
   return (
     <div className='border w-fit h-fit' >
-       <div className='bg-gray-400 p-2 px-8 w-fit'>
+      <div className='bg-[#581845] p-2 px-8 text-center text-white font-bold'>
         Create New List
-       </div>
-       
-       <div onClick={handleCreateList}  className='bg-gray-300  p-2 text-4xl flex justify-center items-center font-thin'>
-        <i className="fa-solid fa-plus active:text-gray-500 text-gray-300 hover:bg-gray-200 bg-gray-100 p-3 rounded-full "></i>
-       </div>
+      </div>
+
+      <div className='bg-white border  p-1 text-xl font-thin'>
+        <input onChange={(e) => setName(e.target.value)} id='input' value={listName} type="text" className='p-1 outline-none border rounded ' placeholder='Enter List Name' />
+        <i onClick={handleCreateList} className="fa-solid fa-plus text-white active:bg-blue-700 bg-blue-500 p-3"></i>
+      </div>
     </div>
   )
 }

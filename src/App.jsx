@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import instance from './instance';
@@ -23,7 +23,6 @@ function App() {
     setLoading(true);
     try {
       const res = await instance.get('/api/v1/list');
-      setLoading(false);
       setLoggedIn(true);
     } catch (error) {
       console.error('Error during login:', error.message);

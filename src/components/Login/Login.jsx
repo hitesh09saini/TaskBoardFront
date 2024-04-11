@@ -37,7 +37,7 @@ const Login = ({ loader, login }) => {
   };
 
   return (
-    <div className="flex items-center justify-center h-[86vh]">
+    <div className="flex items-center justify-center min-h-[87vh]">
       <div className="bg-gray-200 p-8 shadow-md rounded-md w-96">
         <h2 className="text-2xl font-semibold mb-6 flex justify-between">
           <div>Login</div>
