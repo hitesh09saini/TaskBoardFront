@@ -94,7 +94,7 @@ const List = ({loader, listName, setData, data }) => {
 
         <div className='min-h-[200px] flex flex-col gap-y-1'>
           {addTask ? (
-            <p className='bg-white px-2 rounded border border-orange-200 cursor'>
+            <p className='bg-white px-2 rounded border border-orange-200 cursor flex gap-1'>
               <input id='newTask' onKeyDown={handleKeyDown} value={taskName} onChange={(e) => setTask(e.target.value)} type="text" className='outline-none p-1' placeholder='Add Task here' />
               <button onClick={createTask} className='p-1 active:text-green-600'>+</button>
             </p>

@@ -70,7 +70,7 @@ const Task = ({loader, set, item, id }) => {
             ref={drag}
             draggable
             key={key}
-            className={`relative select-none bg-white px-2 rounded border border-orange-200 ${isDragging ? 'opacity-50' : ''
+            className={`relative select-none bg-white px-2 rounded border border-orange-200  flex gap-1 ${isDragging ? 'opacity-50' : ''
                 }`}
         >
             <i
