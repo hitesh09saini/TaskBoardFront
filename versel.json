@@ -1,8 +1,7 @@
 {
     "rewrites": [
-        { "source": "/", "destination": "/src/components/Signin/Signin.jsx"
-        },
-        { "source": "/login", "destination": "/src/components/Login/Login.jsx"
+        {  
+            "source": "/(.*)", "destination": "/"
         }
     ]
 }
