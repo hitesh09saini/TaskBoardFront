@@ -1,42 +1,57 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import instance from '../../instance';
 
-
 const CreateList = ({ fetch }) => {
-  const [listName, setName] = useState('')
+  const [listName, setName] = useState('');
 
   const handleCreateList = async (e) => {
-    e.preventDefault()
-    try {
-      if(!listName){
-        alert('List Name is Required!')
-        return
-      }
-      const res = await instance.post('/api/v1/list/createList', {
-        listName,
-        "tasks": [
-        ],
-      })
+    e.preventDefault();
 
-      setName('')
+    if (!listName.trim()) {
+      alert('List Name is Required!');
+      return;
+    }
+
+    try {
+      await instance.post('/api/v1/list/createList', {
+        listName,
+        tasks: [],
+      });
+
+      setName('');
       fetch();
     } catch (error) {
-      console.log(error);
+      console.error('Error creating list:', error);
     }
-  }
+  };
 
   return (
-    <div className='border w-fit h-fit' >
-      <div className='bg-[#581845] p-2 px-8 text-center text-white font-bold'>
-        Create New List
-      </div>
+    <form
+      onSubmit={handleCreateList}
+      className="bg-white border border-gray-300 rounded-lg shadow-md p-4 w-full max-w-md"
+    >
+      <h2 className="text-xl font-semibold mb-3 text-[#581845]">Create New List</h2>
 
-      <div className='bg-white border  p-1 text-xl font-thin'>
-        <input onChange={(e) => setName(e.target.value)} id='input' value={listName} type="text" className='p-1 outline-none border rounded ' placeholder='Enter List Name' />
-        <i onClick={handleCreateList} className="fa-solid fa-plus text-white active:bg-blue-700 bg-blue-500 p-3"></i>
+      <div className="flex gap-3">
+        <input
+          type="text"
+          placeholder="Enter List Name"
+          value={listName}
+          onChange={(e) => setName(e.target.value)}
+          className="flex-grow border border-gray-300 rounded-md p-2 outline-none focus:ring-2 focus:ring-[#581845]"
+          aria-label="List Name"
+          autoComplete="off"
+        />
+        <button
+          type="submit"
+          className="bg-[#581845] hover:bg-[#7b1e7c] text-white px-4 rounded-md transition"
+          aria-label="Create List"
+        >
+          <i className="fa-solid fa-plus"></i>
+        </button>
       </div>
-    </div>
-  )
-}
+    </form>
+  );
+};
 
-export default CreateList
+export default CreateList;

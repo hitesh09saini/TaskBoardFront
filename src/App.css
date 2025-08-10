@@ -110,7 +110,14 @@ svg {
   color: #888;
 }
 
-
-::-webkit-scrollbar{
-  display: none;
+/* Hide scrollbar but still allow scrolling */
+.flex-1::-webkit-scrollbar {
+  width: 6px;
+}
+.flex-1::-webkit-scrollbar-track {
+  background: transparent;
+}
+.flex-1::-webkit-scrollbar-thumb {
+  background-color: rgba(107, 33, 168, 0.5);
+  border-radius: 3px;
 }

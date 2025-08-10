@@ -1,117 +1,127 @@
 import React, { useState } from 'react';
-import './lis.css';
 import instance from '../../instance';
 import Task from './Task';
 import { useDrop } from 'react-dnd';
 
-
-const List = ({loader, listName, setData, data }) => {
-
-
-
+const List = ({ loader, listName, setData, data }) => {
   const [addTask, setAddTask] = useState(false);
   const [taskName, setTask] = useState('');
   const [taskData, setTaskData] = useState(data.tasks);
-
   const id = data._id;
 
-
-
   const createTask = async () => {
-    // e.preventDefault();
-    loader(true)
+    if (!taskName.trim()) return;
+    loader(true);
     try {
-
-      if (!taskName) return;
-      const res = await instance.post(`/api/v1/list/task/${id}`, {
-        taskName
-      });
-
-      setTaskData(res.data.list)
+      const res = await instance.post(`/api/v1/list/task/${id}`, { taskName });
+      setTaskData(res.data.list.tasks || []);
     } catch (error) {
       console.error(error);
     } finally {
-      setTask('')
-      setAddTask(false)
-      loader(false)
+      setTask('');
+      setAddTask(false);
+      loader(false);
     }
-  }
+  };
 
   const deleteList = async (e) => {
     e.preventDefault();
-    loader(true)
+    loader(true);
     try {
       const res = await instance.delete(`/api/v1/list/${id}`);
-      setData(res.data.lists)
+      setData(res.data.lists || []);
     } catch (error) {
       console.error(error);
-    }finally{
-      loader(false)
+    } finally {
+      loader(false);
     }
-  }
+  };
 
   const set = (data) => {
     setTaskData(data);
-  }
+  };
 
-  const handleKeyDown = async (e) => {
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      createTask()
+      createTask();
     }
-  }
-
-
+  };
 
   const [{ isOver }, drop] = useDrop({
     accept: 'TASK',
-
     drop: async (item) => {
       const res = await instance.post(`/api/v1/list/task/${id}`, {
-        taskName: item.Text
+        taskName: item.Text,
       });
-      setTaskData(res.data.list);
+      setTaskData(res.data.list.tasks || []);
     },
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
   });
 
-
   return (
-    <div ref={drop} key={data._id} className='bg-white shadow-xl border rounded  min-h-[300px] h-fit w-fit'>
-      <div className='relative bg-[#581845] p-2 px-8 min-w-[200px]  text-center text-white font-bold'>
-         {listName|| "LIST"}
-        <i onClick={deleteList} className='absolute right-2 top-4 text-red-400 fa-solid fa-trash-alt  active:text-red-400 ml-3 cursor-pointer text-[15px]'
-        ></i>
+    <div
+      ref={drop}
+      key={data._id}
+      className={`bg-white shadow-lg border border-gray-300 rounded-lg h-[420px] overflow-hidden flex flex-col transition-shadow duration-300
+        ${isOver ? 'shadow-2xl ring-2 ring-purple-500' : ''}
+      `}
+    >
+      {/* Header */}
+      <div className="relative bg-purple-700 p-3 text-center text-white font-extrabold tracking-wide select-none rounded-t-lg">
+        {listName || 'LIST'}
+        <button
+          onClick={deleteList}
+          aria-label="Delete List"
+          className="absolute right-3 top-3 text-red-400 hover:text-red-600 transition-colors duration-200"
+          title="Delete List"
+        >
+          <i className="fa-solid fa-trash-alt text-lg"></i>
+        </button>
       </div>
-      <div className='p-1'>
 
-        <p className='p-1 rounded border'>
-          <label htmlFor="newTask" onClick={() => setAddTask(!addTask)}>
-            <i className="text-[10px] fa-solid fa-plus active:text-gray-500 bg-gray-100 hover:bg-gray-200 p-3 rounded-full"></i> Add Task
-          </label>
-        </p>
+      {/* Add Task Section */}
+      <div className="p-3 border-b border-gray-200">
+        <button
+          onClick={() => setAddTask(!addTask)}
+          className="flex items-center gap-2 text-purple-700 font-semibold hover:text-purple-900 focus:outline-none"
+        >
+          <i className="fa-solid fa-plus-circle text-lg"></i>
+          Add Task
+        </button>
 
-        <div className='min-h-[200px] flex flex-col gap-y-1'>
-          {addTask ? (
-            <p className='bg-white px-2 rounded border border-orange-200 cursor flex gap-1'>
-              <input id='newTask' onKeyDown={handleKeyDown} value={taskName} onChange={(e) => setTask(e.target.value)} type="text" className='outline-none p-1' placeholder='Add Task here' />
-              <button onClick={createTask} className='p-1 active:text-green-600'>+</button>
-            </p>
-          ) : (
-            ""
-          )}
+        {addTask && (
+          <div className="mt-3 flex gap-2">
+            <input
+              id="newTask"
+              type="text"
+              placeholder="Enter task name"
+              value={taskName}
+              onChange={(e) => setTask(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="flex-grow border border-purple-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+              autoFocus
+            />
+            <button
+              onClick={createTask}
+              className="bg-purple-600 text-white px-4 rounded-md hover:bg-purple-700 transition-colors duration-200"
+            >
+              Add
+            </button>
+          </div>
+        )}
+      </div>
 
-
-
-          {
-            taskData.map((item) => (
-              <Task loader={loader} key={item._id} set={set} item={item} id={id} />
-            )
-            )
-          }
-
-        </div>
+      {/* Task List */}
+      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
+        {taskData.length > 0 ? (
+          taskData.map((item) => (
+            <Task key={item._id} loader={loader} set={set} item={item} id={id} />
+          ))
+        ) : (
+          <p className="text-center text-gray-400 mt-6 select-none">No tasks found.</p>
+        )}
       </div>
     </div>
   );
