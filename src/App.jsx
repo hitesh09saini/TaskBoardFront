@@ -7,7 +7,6 @@ import './App.css';
 import Footer from './components/Footer/Footer';
 import Header from './components/Header/Header';
 import Signin from './components/Signin/Signin';
-import Login from './components/Login/Login';
 import Main from './components/Main/Main';
 import Loader from './components/Loader/Loader';
 
@@ -35,8 +34,7 @@ function App() {
               <Routes>
                 {/* Public routes */}
                 <Route element={<PublicRoute />}>
-                  <Route path="/signin" element={<Signin loader={setLoading} />} />
-                  <Route path="/login" element={<Login loader={setLoading} />} />
+                  <Route path="/login" element={<Signin loader={setLoading} />} />
                 </Route>
 
                 {/* Private routes */}

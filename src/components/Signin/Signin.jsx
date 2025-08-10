@@ -16,9 +16,11 @@ const Signin = ({ loader }) => {
     try {
       const res = await instance.post('/api/v1/user/register', { email, password });
       setSignInError(null);
+      console.log(res);
+      
       if (res?.data?.token) {
         localStorage.setItem('token', res.data.token);
-        window.location.href = '/';
+        // window.location.href = '/';
       }
     } catch (error) {
       if (error.response) {
@@ -34,7 +36,6 @@ const Signin = ({ loader }) => {
   return (
     <div className="flex items-center justify-center min-h-[87vh] bg-gray-50 px-4">
       <div className="bg-white shadow-lg rounded-lg w-full max-w-md p-8">
-        <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Sign In</h2>
         <form onSubmit={handleSubmit} noValidate>
           <div className="mb-5">
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
@@ -98,15 +99,8 @@ const Signin = ({ loader }) => {
             type="submit"
             className="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition-colors"
           >
-            Sign In
+            Login
           </button>
-
-          <p className="mt-4 text-center text-gray-600 text-sm">
-            Already have an account?{' '}
-            <Link to="/login" className="text-indigo-600 hover:underline">
-              Login here
-            </Link>
-          </p>
         </form>
       </div>
     </div>

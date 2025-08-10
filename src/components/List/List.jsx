@@ -6,6 +6,7 @@ import { useDrop } from 'react-dnd';
 const List = ({ loader, listName, setData, data }) => {
   const [addTask, setAddTask] = useState(false);
   const [taskName, setTask] = useState('');
+  const [description, setDescription] = useState('');
   const [taskData, setTaskData] = useState(data.tasks);
   const id = data._id;
 
@@ -13,12 +14,13 @@ const List = ({ loader, listName, setData, data }) => {
     if (!taskName.trim()) return;
     loader(true);
     try {
-      const res = await instance.post(`/api/v1/list/task/${id}`, { taskName });
+      const res = await instance.post(`/api/v1/list/task/${id}`, { taskName, description });
       setTaskData(res.data.list.tasks || []);
     } catch (error) {
       console.error(error);
     } finally {
       setTask('');
+      setDescription('');
       setAddTask(false);
       loader(false);
     }
@@ -92,7 +94,7 @@ const List = ({ loader, listName, setData, data }) => {
         </button>
 
         {addTask && (
-          <div className="mt-3 flex gap-2">
+          <div className="mt-3 flex flex-col gap-2">
             <input
               id="newTask"
               type="text"
@@ -100,12 +102,19 @@ const List = ({ loader, listName, setData, data }) => {
               value={taskName}
               onChange={(e) => setTask(e.target.value)}
               onKeyDown={handleKeyDown}
-              className="flex-grow border border-purple-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
+              className="border border-purple-300 rounded-md px-3 py-2 focus:ring-2 focus:ring-purple-400 outline-none"
               autoFocus
+            />
+            <textarea
+              className="border border-purple-300 rounded-md px-3 py-2 resize-none focus:ring-2 focus:ring-purple-400 outline-none"
+              value={description}
+              placeholder="Description"
+              onChange={(e) => setDescription(e.target.value)}
+              rows={3}
             />
             <button
               onClick={createTask}
-              className="bg-purple-600 text-white px-4 rounded-md hover:bg-purple-700 transition-colors duration-200"
+              className="self-start bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition-colors duration-200"
             >
               Add
             </button>

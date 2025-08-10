@@ -34,22 +34,15 @@ const Header = ({ isLoggedIn, setLoggedIn }) => {
             Logout
           </button>
         ) : (
-          <>
-            <Link
-              to="/login"
-              className="mr-4 hover:text-gray-300 transition"
-              aria-label="Login"
-            >
-              Login
-            </Link>
-            <Link
-              to="/"
-              className="hover:text-gray-300 transition"
-              aria-label="Sign In"
-            >
-              Sign In
-            </Link>
-          </>
+
+          <Link
+            to="/login"
+            className="mr-4 hover:text-gray-300 transition"
+            aria-label="Login"
+          >
+            Login
+          </Link>
+
         )}
       </nav>
     </header>
